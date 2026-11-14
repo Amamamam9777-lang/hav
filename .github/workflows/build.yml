@@ -1,0 +1,28 @@
+name: Build Dylib
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build project
+        run: |
+          # Переходим в папку с проектом
+          cd "FUCK S0N_MX BY HMOOD"
+          # Получаем имя схемы автоматически
+          SCHEME=$(xcodebuild -list -json | jq -r '.project.schemes[0]')
+          echo "Building scheme: $SCHEME"
+          # Собираем проект
+          xcodebuild -project HMOOD_FUCK_MAX.xcodeproj -scheme "$SCHEME" -configuration Release -sdk iphoneos CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dylib-output
+          path: "FUCK S0N_MX BY HMOOD/build/Release/*.dylib"
