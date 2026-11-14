@@ -13,16 +13,15 @@ jobs:
 
       - name: Build project
         run: |
-          # Переходим в папку с проектом
           cd "FUCK S0N_MX BY HMOOD"
-          # Получаем имя схемы автоматически
           SCHEME=$(xcodebuild -list -json | jq -r '.project.schemes[0]')
           echo "Building scheme: $SCHEME"
-          # Собираем проект
-          xcodebuild -project HMOOD_FUCK_MAX.xcodeproj -scheme "$SCHEME" -configuration Release -sdk iphoneos CODE_SIGNING_ALLOWED=NO
+          # Флаг -derivedDataPath ./build сохранит результаты сборки в папку build
+          xcodebuild -project HMOOD_FUCK_MAX.xcodeproj -scheme "$SCHEME" -configuration Release -sdk iphoneos CODE_SIGNING_ALLOWED=NO -derivedDataPath ./build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: dylib-output
-          path: "FUCK S0N_MX BY HMOOD/build/Release/*.dylib"
+          # Ищем все .dylib файлы в папке build
+          path: "FUCK S0N_MX BY HMOOD/build/**/*.dylib"
